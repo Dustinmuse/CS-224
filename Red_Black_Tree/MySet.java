@@ -23,7 +23,7 @@ public class MySet<T> implements Set<T>
         count = 0;
         T[] ary = (T[]) c.toArray();
         contents = null;
-        for (int i = 0; i < ary.length; i++)
+        for (int i = 0; i < ary.length; i++) //adding each element in the collection c into a linked node --- O(n)
         {
             add(ary[i]);
         }
@@ -69,13 +69,26 @@ public class MySet<T> implements Set<T>
     public boolean remove(Object o)
     {
         T target = (T) o;
+        if (target == null)
+        {
+            return false; // Cannot remove a null element
+        }
+
         MyNode<T> previous = null;
         MyNode<T> current = contents;
-        for (int i = 0; i < count; i++) //0(n)
+
+        for (int i = 0; i < count; i++)
         {
-            if (current.element.equals(target))
+            if (current != null && current.element != null && current.element.equals(target))
             {
-                previous.setNext(current.next);
+                if (previous == null)
+                {
+                    contents = current.next;
+                }
+                else
+                {
+                    previous.setNext(current.next);
+                }
                 count--;
                 return true;
             }
@@ -84,9 +97,10 @@ public class MySet<T> implements Set<T>
                 previous = current;
                 current = current.next;
             }
-        } // close for loop
+        }
         return false;
-    }//close remove method
+    }
+
     /*
      * Returns true if this set contains all of the elements of the specified collection.
      */
